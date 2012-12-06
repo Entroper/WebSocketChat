@@ -1,4 +1,4 @@
-WebSockets
-==========
+WebSocketChat
+=============
 
-A simple example of a server supporting WebSockets.
+A chat server using WebSockets.
