@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="ChatServer.cs" />
     <Compile Include="ChatSocket.cs" />
+    <Compile Include="PBKDF2_SHA256.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
