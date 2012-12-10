@@ -16,6 +16,18 @@ namespace ChatServer
 
 		private byte[] lastSalt;
 		private byte[] state;
+		private string password;
+		private int IterationCount1;
+
+		public PBKDF2_SHA256(string message, string salt, int iterationCount)
+		{
+			Message = Encoding.UTF8.GetBytes(message);
+			Salt = Encoding.UTF8.GetBytes(salt);
+			IterationCount = iterationCount;
+
+			hasher = new SHA256Cng();
+			Reset();
+		}
 
 		public PBKDF2_SHA256(string message, byte[] salt, int iterationCount)
 		{
@@ -36,7 +48,7 @@ namespace ChatServer
 			hasher = new SHA256Cng();
 			Reset();
 		}
-		
+
 		public override byte[] GetBytes(int cb)
 		{
 			if (cb % StateSize != 0 || cb <= 0)
