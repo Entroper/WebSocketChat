@@ -15,7 +15,8 @@ namespace WebSocketApplication
 
 			Task.Factory.StartNew(() => listener.Run());
 
-			Console.ReadKey();
+			while (true)
+				Thread.Yield();
 		}
 	}
 }
