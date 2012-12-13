@@ -20,7 +20,8 @@ namespace WebSocketListener
 			this.webSocketServer = webSocketServer;
 
 			listener = new HttpListener();
-			listener.Prefixes.Add("http://*:8080/");
+			listener.Prefixes.Add("https://*/");
+			listener.AuthenticationSchemes = AuthenticationSchemes.Basic;
 		}
 
 		public async void Run()
