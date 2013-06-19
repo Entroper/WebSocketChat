@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace ChatServer
 {
-	class KeyMaster
+	public class KeyMaster
 	{
 		public const int IterationCount = 65536;
 
@@ -11,7 +11,7 @@ namespace ChatServer
 
 		private ChatServerContainer container = new ChatServerContainer();
 
-		void CreateUser(string name, string password)
+		public void CreateUser(string name, string password)
 		{
 			byte[] salt = new byte[PBKDF2_SHA256.StateSize];
 			rng.GetBytes(salt);
@@ -26,7 +26,7 @@ namespace ChatServer
 			container.SaveChanges();
 		}
 
-		User ValidateUser(string name, string password)
+		public User ValidateUser(string name, string password)
 		{
 			User user = container.Users.Single(u => u.Name == name);
 			PBKDF2_SHA256 hasher = new PBKDF2_SHA256(password, user.PasswordSalt, IterationCount);
