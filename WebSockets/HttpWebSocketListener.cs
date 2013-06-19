@@ -7,10 +7,10 @@ namespace WebSocketListener
 {
 	public class HttpWebSocketListener
 	{
-		IHttpServer httpServer;
-		IWebSocketServer webSocketServer;
+		private readonly IHttpServer httpServer;
+		private readonly IWebSocketServer webSocketServer;
 
-		HttpListener listener;
+		private readonly HttpListener listener;
 
 		public bool IsRunning { get; private set; }
 
@@ -33,7 +33,7 @@ namespace WebSocketListener
 			while (IsRunning)
 			{
 				var context = await listener.GetContextAsync();
-				Task.Factory.StartNew(() => ContextHandler(context));
+				Task.Run(() => ContextHandler(context));
 			}
 		}
 

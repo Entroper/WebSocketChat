@@ -10,9 +10,6 @@ namespace ChatServer
 {
 	class StaticContentServer : IHttpServer
 	{
-		private const int BufferSize = 65536;
-		byte[] fileBuffer = new byte[BufferSize];
-
 		public void HandleContext(HttpListenerContext context)
 		{
 			string localPath = HttpUtility.UrlDecode(context.Request.Url.LocalPath);
@@ -23,34 +20,31 @@ namespace ChatServer
 		{
 			if (File.Exists(localPath))
 			{
-				FileStream fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+				var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+				var response = context.Response;
 
-				context.Response.ContentLength64 = fs.Length;
-				context.Response.ContentType = GetContentType(localPath);
+				response.ContentLength64 = fs.Length;
+				response.ContentType = GetContentType(localPath);
 
-				while (fs.Position != fs.Length)
-				{
-					int bytesRead = await fs.ReadAsync(fileBuffer, 0, BufferSize);
-					await context.Response.OutputStream.WriteAsync(fileBuffer, 0, bytesRead);
-				}
+				await fs.CopyToAsync(response.OutputStream);
 
-				context.Response.Close();
+				response.Close();
 			}
 		}
 
-		static Dictionary<string, string> mimeTypes;
+		static readonly Dictionary<string, string> MimeTypes;
 
 		static StaticContentServer()
 		{
-			mimeTypes = new Dictionary<string, string>();
-			mimeTypes["htm"] = "text/html";
-			mimeTypes["html"] = "text/html";
-			mimeTypes["css"] = "text/css";
-			mimeTypes["js"] = "application/javascript";
-			mimeTypes["jpg"] = "text/html";
-			mimeTypes["jpeg"] = "text/html";
-			mimeTypes["gif"] = "text/html";
-			mimeTypes["png"] = "text/html";
+			MimeTypes = new Dictionary<string, string>();
+			MimeTypes["htm"] = "text/html";
+			MimeTypes["html"] = "text/html";
+			MimeTypes["css"] = "text/css";
+			MimeTypes["js"] = "application/javascript";
+			MimeTypes["jpg"] = "text/html";
+			MimeTypes["jpeg"] = "text/html";
+			MimeTypes["gif"] = "text/html";
+			MimeTypes["png"] = "text/html";
 		}
 
 		private static string GetContentType(string localPath)
@@ -60,8 +54,8 @@ namespace ChatServer
 				return "text/plain";
 
 			string suffix = localPath.Substring(suffixPos + 1);
-			if (mimeTypes.ContainsKey(suffix))
-				return mimeTypes[suffix];
+			if (MimeTypes.ContainsKey(suffix))
+				return MimeTypes[suffix];
 			else
 				throw new NotImplementedException("File extension \"." + suffix + "\" is not implemented");
 		}

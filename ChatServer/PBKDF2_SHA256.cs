@@ -12,12 +12,10 @@ namespace ChatServer
 		public byte[] Salt { get; set; }
 		public int IterationCount { get; set; }
 
-		private SHA256 hasher;
+		private readonly SHA256 hasher;
 
 		private byte[] lastSalt;
 		private byte[] state;
-		private string password;
-		private int IterationCount1;
 
 		public PBKDF2_SHA256(string message, string salt, int iterationCount)
 		{

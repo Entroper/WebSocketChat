@@ -13,7 +13,7 @@ namespace WebSocketApplication
 			var webSocketServer = new EchoSocket();
 			var listener = new HttpWebSocketListener(httpServer, webSocketServer);
 
-			Task.Factory.StartNew(() => listener.Run());
+			Task.Run(() => listener.Run());
 
 			while (true)
 				Thread.Yield();
